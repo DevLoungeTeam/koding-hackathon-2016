@@ -1,0 +1,72 @@
+<form class="form-menu">
+    <div class="center">
+        <img src="/assets/logo.png" width="100%">
+    </div>
+	<button class="btn-lg btn-block button" id="menuSpeedMode">Play</button>
+	<button class="btn-lg btn-block button" id="menuRankings">Rankings</button>
+	<button class="btn-lg btn-block button" id="menuCredits">Credits</button>
+	<button class="btn-lg btn-block login" id="menuLogout">Logout</button>
+	<button class="btn-lg btn-block button" id="menuMusic">Start/Stop music</button>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        if(musicPlaying) {
+            var audio = document.getElementById("playPlayer");
+            audio.pause();
+            
+            var audio = document.getElementById("menuPlayer");
+            audio.pause();
+            audio.play();
+        }
+    });
+
+    $("#menuSpeedMode").click(function(event) {
+        event.preventDefault();
+        
+        $.get('/templates/modes/speedmode.html', function(data) {
+            $(".container").html(data);
+            window.document.title = "Math Game :: Speed Mode";
+        }); 
+    });
+    
+    $("#menuRankings").click(function(event) {
+        event.preventDefault();
+        
+        $.get('/templates/rankings.html', function(data) {
+            $(".container").html(data);
+            window.document.title = "Math Game :: Rankings";
+        }); 
+    });
+    
+    $("#menuCredits").click(function(event) {
+        event.preventDefault();
+        
+        $.get('/templates/credits.html', function(data) {
+            $(".container").html(data);
+            window.document.title = "Math Game :: Credits";
+        }); 
+    });
+    
+    $("#menuLogout").click(function(event) {
+        event.preventDefault();
+        
+        $.get('/templates/login.html', function(data) {
+            window.location.href="/";
+        }); 
+    });
+    
+    $("#menuMusic").click(function(event) {
+        event.preventDefault();
+        
+        if(musicPlaying) {
+            var audio = document.getElementById("menuPlayer");
+            audio.pause();
+            
+            var audio = document.getElementById("playPlayer");
+            audio.pause();
+        }
+        
+        musicPlaying = !musicPlaying;
+    });
+</script>

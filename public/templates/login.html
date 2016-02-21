@@ -1,0 +1,74 @@
+<form class="form-signin">
+    <div class="center">
+        <img src="/assets/logo.png" width="100%">
+    </div>
+	<h2 class="form-signin-heading">Login</h2>
+	<label for="inputUsername" class="sr-only">Username</label>
+	<input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+	<label for="inputPassword" class="sr-only">Password</label>
+	<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+	<button class="btn-lg btn-block login" type="submit" id="submitButton">Login</button>
+	<button class="btn-lg btn-block button" type="submit" id="registerButton">Sign up</button><br>
+	<div class="alert alert-danger" role="alert" style="display: none;" id="loginErrorBlock">
+	
+    </div>
+</form>
+
+<script type="text/javascript">
+    $("#registerButton").click(function(event) {
+        event.preventDefault();
+        
+        $.get('/templates/register.html', function(data) {
+            $(".container").html(data);
+            window.document.title = "Math Game :: Sign up";
+        });
+    });
+
+    $("form.form-signin #submitButton").click(function(event) {
+        event.preventDefault();
+        
+        var username = $("form.form-signin #inputUsername");
+        var password = $("form.form-signin #inputPassword");
+        var button = $("form.form-signin #submitButton");
+        var buttonText;
+        var loggedIn = 0;
+        
+        username.attr("disabled", "true");
+        password.attr("disabled", "true");
+        button.attr("disabled", "true");
+        buttonText = button.val();
+        
+        button.val("...");
+        
+        $.get('/login', { 'username': username.val(), 'password': password.val() }, function(data) {
+            data = JSON.parse(data);
+            _securityToken = data.securityToken;
+            if(data.status == true) {
+                $.get('/templates/menu.html', function(data) {
+                    $(".container").html(data);
+                    window.document.title = "Math Game :: Menu";
+                    io.emit("join room", _securityToken);
+                });
+                
+                $('body').animate({opacity: 0}, 'slow', function() {
+                    $(this)
+                        .removeClass('night')
+                        .addClass('day')
+                        .animate({opacity: 1});
+                });
+                loggedIn = 1;
+            } else {
+                $("#loginErrorBlock").html(data.message);
+                $("#loginErrorBlock").css("display","block");
+            }
+        })
+        .always(function() {
+            if(!loggedIn) {
+                button.val(buttonText);
+                username.removeAttr("disabled");
+                password.removeAttr("disabled");
+                button.removeAttr("disabled");
+            }
+        });
+    });
+</script>

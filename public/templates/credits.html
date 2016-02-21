@@ -1,0 +1,42 @@
+<form class="form-end">
+    <div class="center">
+        <img src="/assets/logo.png" width="100%">
+    </div>
+	<h2 class="form-signin-heading">Credits</h2>
+	<b>Thanks to</b>:
+	<ul>
+	    <li><b>Nicola Delle Foglie</b> - Developer</li>
+	    <li><b>Elisa Eksuzyan</b> - Graphic Designer</li>
+	    <li><b>Christian Marini</b> - UX Designer</li>
+	    <li><b>Luca Pacucci</b> - Music Composer</li>
+	    <li>all DevLounge members for support</li>
+	    <li>and to testers and fans!</li>
+	</ul>
+	
+	<b>Libraries/Languages/Media used:</b>
+	<ul>
+	    <li>HTML</li>
+	    <li>CSS</li>
+	    <li>Javascript</li>
+	    <li>NodeJS</li>
+	    <li>jQuery</li>
+	    <li>jQuery UI</li>
+	    <li>Parse.com</li>
+	    <li>Express</li>
+	    <li>Happy Ride by Magnus Ringblom</li>
+	    <li>Think Right by Luca Pacucci</li>
+	</ul>
+	
+	<button class="btn-lg btn-block button" id="menuBack">Back to menu</button>
+</form>
+
+<script type="text/javascript">
+    $("#menuBack").click(function(event) {
+        event.preventDefault();
+        
+        $.get('/templates/menu.html', function(page) {
+            $(".container").html(page);
+            window.document.title = "Math Game :: Menù";
+        });
+    });
+</script>

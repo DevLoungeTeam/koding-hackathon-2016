@@ -1,0 +1,39 @@
+<form class="form-end">
+    <div class="center">
+        <img src="/assets/logo.png" width="100%">
+    </div>
+	<h2 class="form-signin-heading">Rankings</h2>
+	
+	<h4>Your position is: <b><span id="yourPosition">...</span></b></h4>
+	<table class="table">
+	    <thead>
+	        <th>Pos</th>
+	        <th>Nickname</th>
+	        <th>Points</th>
+	    </thead>
+	    <tbody id="data">
+	        
+	    </tbody>
+	</table>
+	
+	<button class="btn-lg btn-block button" id="menuBack">Back to menu</button>
+</form>
+
+<script type="text/javascript">
+    io.on("position", function() {});
+    io.on("first 10", function() {});
+
+    $(document).ready(function() {
+        io.emit("request position", { _securityToken: _securityToken });
+        io.emit("request first 10");
+    });
+
+    $("#menuBack").click(function(event) {
+        event.preventDefault();
+        
+        $.get('/templates/menu.html', function(page) {
+            $(".container").html(page);
+            window.document.title = "Math Game :: Menù";
+        });
+    });
+</script>

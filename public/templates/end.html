@@ -1,0 +1,29 @@
+<form class="form-end">
+    <div class="center">
+        <img src="/assets/logo.png" width="100%">
+    	<h2 class="form-signin-heading">Game over!</h2>
+    </div>
+	<center>You gathered<br><h3 id="points">...</h3><br>points.</center><br>
+	<button class="btn-lg btn-block button" id="menuBack">Back to menu</button>
+	<button class="btn-lg btn-block button" id="menuRetry">Retry</button>
+</form>
+
+<script type="text/javascript">
+    $("#menuBack").click(function(event) {
+        event.preventDefault();
+        
+        $.get('/templates/menu.html', function(page) {
+            $(".container").html(page);
+            window.document.title = "Math Game :: Menu";
+        });
+    });
+    
+    $("#menuRetry").click(function(event) {
+        event.preventDefault();
+        
+        $.get('/templates/modes/speedmode.html', function(data) {
+            $(".container").html(data);
+            window.document.title = "Math Game :: Speed Mode";
+        }); 
+    });
+</script>

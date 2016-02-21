@@ -1,0 +1,52 @@
+<form class="form-mode">
+    <div id="modeQuestion" style="align: center;"><h2 id="modeQuestionContent">...</h2></div>
+    <input type="number" id="inputResult" class="form-control" placeholder="Result" style="text-align: center;">
+    <h4 id="info">Timer: <span id="modeTimer">0</span> | Points: <span id="modePoints">0</span></h4>
+	<button class="btn-lg btn-block button" type="submit" id="modeStartMode">Start!</button>
+	<p id="rules"><br>Insert the number and press ENTER :) It's easy!</p>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var questionID = "";
+        var timer = 0;
+        var playing = 0;
+        
+        if(musicPlaying) {
+            var audio = document.getElementById("menuPlayer");
+            audio.pause();
+            
+            var audio = document.getElementById("playPlayer");
+            audio.pause();
+            audio.play(); 
+        }
+        
+        $("#inputResult").hide();
+        $("#info").hide();
+        $("#modeQuestion").hide();
+    });
+
+    $("#modeStartMode").click(function(event) {
+        event.preventDefault();
+        showingOver = false;
+        io.emit("start now", { _securityToken: _securityToken });
+        io.emit("request operation", { _securityToken: _securityToken });
+        $("#modeStartMode").attr("disabled", true);
+        $("#modeStartMode").fadeOut();
+        $("#rules").fadeOut();
+        $("#inputResult").fadeIn();
+        $("#info").fadeIn();
+        $("#modeQuestion").fadeIn();
+        $("#inputResult").focus();
+    });
+    
+    $(".form-mode").submit(function(event) {
+        event.preventDefault();
+    });
+    
+    $("#inputResult").keydown(function(e) {
+        if(e.which == 13 || e.which == 32) {
+            io.emit("operation result", { _securityToken: _securityToken, questionID: questionID, result: $("#inputResult").val() });
+        }
+    });
+</script>

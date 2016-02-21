@@ -1,0 +1,77 @@
+<form class="form-signup">
+	<h2 class="form-signup-heading">Sign up</h2>
+	<label for="inputUsername" class="sr-only">Username</label>
+	<input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+	<label for="inputEmail" class="sr-only">Email address</label>
+	<input type="email" id="inputEmail" class="form-control" placeholder="Email address" required>
+	<label for="inputPassword" class="sr-only">Password</label>
+	<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+	<label for="inputCPassword" class="sr-only">Confirm Password</label>
+	<input type="password" id="inputCPassword" class="form-control" placeholder="Confirm Password" required>
+	<button class="btn-lg btn-block login" type="submit" id="submitButton">Sign up</button>
+	<button class="btn-lg btn-block button" type="button" id="loginButton">Login</button><br>
+	<div class="alert alert-danger" role="alert" style="display: none;" id="registerErrorBlock">
+	
+    </div>
+</form>
+
+<script type="text/javascript">
+    $("#loginButton").click(function(event) {
+        event.preventDefault();
+        
+        $.get('/templates/login.html', function(data) {
+            $(".container").html(data);
+            window.document.title = "Math Game :: Login";
+        });
+    });
+    
+    $("form.form-signup #submitButton").click(function(event) {
+        event.preventDefault();
+        
+        var username = $("form.form-signup #inputUsername");
+        var email = $("form.form-signup #inputEmail");
+        var password = $("form.form-signup #inputPassword");
+        var cpassword = $("form.form-signup #inputCPassword");
+        var button = $("form.form-signup #submitButton");
+        var buttonText;
+        var loggedIn = 0;
+        
+        username.attr("disabled", "true");
+        email.attr("disabled", "true");
+        password.attr("disabled", "true");
+        cpassword.attr("disabled", "true");
+        button.attr("disabled", "true");
+        buttonText = button.val();
+        
+        button.val("...");
+        
+        $.post('/register', { 'username': username.val(), 'email': email.val(), 'password': password.val(), 'confirmPassword': cpassword.val() }, function(data) {
+            data = JSON.parse(data);
+            _securityToken = data.securityToken;
+            if(data.status == true) {
+                /*** $.get('/templates/menu.html', function(data) {
+                    $(".container").html(data);
+                    window.document.title = "Math Game :: Menu";
+                    io.emit("join room", _securityToken);
+                }); ***/
+                window.location.href = "/";
+                $("body").removeClass("night");
+                $("body").addClass("day");
+                loggedIn = 1;
+            } else {
+                $("#registerErrorBlock").html(data.message);
+                $("#registerErrorBlock").css("display","block");
+            }
+        })
+        .always(function() {
+            if(!loggedIn) {
+                button.val(buttonText);
+                username.removeAttr("disabled");
+                email.removeAttr("disabled");
+                password.removeAttr("disabled");
+                cpassword.removeAttr("disabled");
+                button.removeAttr("disabled");
+            }
+        });
+    });
+</script>
