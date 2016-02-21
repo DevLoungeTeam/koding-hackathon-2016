@@ -16,5 +16,8 @@ jQuery
 jQuery UI  
 Parse.com  
 Express  
+body-parser  
+randomstring  
+socket.io  
 Happy Ride by Magnus Ringblom  
 Think Right by Luca Pacucci  
